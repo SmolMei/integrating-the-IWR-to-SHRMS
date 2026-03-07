@@ -1,0 +1,95 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+
+class User extends Authenticatable
+{
+    public const ROLE_EMPLOYEE = 'employee';
+
+    public const ROLE_EVALUATOR = 'evaluator';
+
+    public const ROLE_HR_PERSONNEL = 'hr-personnel';
+
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'password',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'remember_token',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'two_factor_confirmed_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function roles(): array
+    {
+        return [
+            self::ROLE_EMPLOYEE,
+            self::ROLE_EVALUATOR,
+            self::ROLE_HR_PERSONNEL,
+        ];
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+
+    public function homeRouteName(): string
+    {
+        if ($this->role === self::ROLE_HR_PERSONNEL) {
+            return 'admin.performance-dashboard';
+        }
+
+        if ($this->role === self::ROLE_EVALUATOR) {
+            return 'performanceDashboard';
+        }
+
+        return 'dashboard';
+    }
+
+    public function leaveRequests(): HasMany
+    {
+        return $this->hasMany(LeaveRequest::class);
+    }
+}
