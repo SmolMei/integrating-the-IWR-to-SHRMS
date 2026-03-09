@@ -25,14 +25,10 @@ export const options = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      position: 'top' as const,
+      display: false,
     },
     title: {
-      display: true,
-      text: 'Real-Time HR Analytics Dashboard',
-      font: {
-        family: 'Montserrat, sans-serif',
-      },
+      display: false,
     },
   },
 };

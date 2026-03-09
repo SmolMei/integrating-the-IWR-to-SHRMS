@@ -1,7 +1,43 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { ArcElement, Chart as ChartJS, Legend, Plugin, Tooltip } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+export const centerTextPlugin: Plugin<'doughnut'> = {
+  id: 'centerText',
+  afterDatasetsDraw(chart) {
+    const { chartArea, ctx } = chart;
+    const dataset = chart.data.datasets[0];
+    const values = (dataset?.data ?? []).map((value) => Number(value) || 0);
+    const total = values.reduce((sum, value) => sum + value, 0);
+    const arcs = chart.getDatasetMeta(0).data as ArcElement[];
+
+    const centerX = (chartArea.left + chartArea.right) / 2;
+    const centerY = (chartArea.top + chartArea.bottom) / 2;
+
+    if (total <= 0) {
+      return;
+    }
+
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = '600 14px Montserrat, sans-serif';
+    ctx.fillStyle = '#FEFEFE';
+
+    arcs.forEach((arc, index) => {
+      const percentage = (values[index] / total) * 100;
+      const angle = (arc.startAngle + arc.endAngle) / 2;
+      const radius = arc.innerRadius + (arc.outerRadius - arc.innerRadius) * 0.58;
+      const x = arc.x + Math.cos(angle) * radius;
+      const y = arc.y + Math.sin(angle) * radius;
+
+      ctx.fillText(`${percentage.toFixed(0)}%`, x, y);
+    });
+
+    ctx.restore();
+  }
+};
+
+ChartJS.register(ArcElement, Tooltip, Legend, centerTextPlugin);
 
 export const options = {
   responsive: true,
@@ -9,14 +45,10 @@ export const options = {
   cutout: '62%',
   plugins: {
     legend: {
-      position: 'top' as const,
+      display: false,
     },
     title: {
-      display: true,
-      text: 'Risk Score',
-      font: {
-        family: 'Montserrat, sans-serif',
-      },
+      display: false,
     },
   },
 };
@@ -36,6 +68,8 @@ export const data = {
         '#EE4B2B',
       ],
       borderWidth: 1,
+      offset: 5,
+      borderRadius: 20,
     },
   ],
 };
