@@ -39,7 +39,7 @@ export default function AttendanceManagement({
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Attendance Management" />
-            <div className="p-4 mx-auto my-auto flex w-full flex-col gap-6 lg:items-stretch">
+            <div className="p-4 mx-auto flex w-full flex-col gap-6 lg:items-stretch">
                 <AttendanceTable attendances={attendances} search={search} pagination={pagination} />
             </div>
         </AppLayout>

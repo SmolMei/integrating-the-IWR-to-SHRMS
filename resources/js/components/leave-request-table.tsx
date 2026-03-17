@@ -119,7 +119,7 @@ export default function LeaveRequestTable({
 
     return (
         <>
-            <div className="animate-slide-in-down container mx-auto max-w-9xl px-6 py-3">
+            <div className="animate-slide-in-down">
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="flex items-center gap-2 text-3xl font-bold">
@@ -131,7 +131,7 @@ export default function LeaveRequestTable({
                 </div>
             </div>
 
-            <div className="animate-zoom-in-soft hover-lift-soft mx-auto w-full max-w-7xl rounded-md border border-border bg-card/80 p-4 shadow-xl">
+            <div className="animate-zoom-in-soft hover-lift-soft mx-auto w-full rounded-md border border-border bg-card/80 p-4 shadow-xl">
                 <div className="flex w-full items-center justify-between gap-4 py-6">
                     <div className="animate-fade-in-left relative w-full max-w-sm">
                         <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />

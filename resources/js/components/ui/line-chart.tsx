@@ -53,7 +53,7 @@ export const data = {
 
 export function LineChart() {
   return (
-    <div className="mx-auto h-48 w-full sm:h-56 md:h-64">
+    <div className="mx-auto h-36 w-full sm:h-40 md:h-44 lg:h-48">
       <Line options={options} data={data} />
     </div>
   );

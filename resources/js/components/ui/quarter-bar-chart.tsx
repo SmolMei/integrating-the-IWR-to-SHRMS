@@ -61,7 +61,7 @@ export function QuarterBarChart({ quarter = 'Q1' }: { quarter?: Quarter }) {
   }, [labels]);
 
   return (
-    <div className="mx-auto h-64 w-full sm:h-72 md:h-80">
+    <div className="mx-auto h-52 w-full sm:h-56 md:h-60 lg:h-64">
       <Bar options={options} data={chartData} />
     </div>
   );

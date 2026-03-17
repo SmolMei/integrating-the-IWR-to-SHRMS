@@ -1,68 +1,66 @@
 import { usePage } from '@inertiajs/react';
 import { Briefcase, ChartLine, TrendingUp, UserRound } from 'lucide-react';
-import { Card, CardDescription, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LineChart } from '@/components/ui/line-chart';
 
 export default function PredictivePerformance() {
     const { auth } = usePage().props;
 
-    return (<>
-        <div className="animate-fade-in-right flex w-full flex-col rounded-xl border border-border bg-secondary/80 p-4 shadow-xl transition-shadow duration-300 hover:shadow-2xl">
-            <h1 className='my-6 ml-6 flex items-center gap-2 font-bold'>
+    return (
+        <div className="animate-fade-in col-span-2 flex w-full flex-col gap-4 rounded-xl border border-border bg-card/80 p-4 shadow-xl transition-shadow duration-300 hover:shadow-2xl sm:gap-5">
+            <h1 className="flex items-center gap-2 text-base font-bold sm:text-lg">
                 <ChartLine className="size-5 text-primary" />
                 Predictive Performance Analysis
             </h1>
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                <Card className="h-full w-full min-w-0 bg-card/80 transition-shadow duration-300 hover:shadow-lg">
-                    <CardHeader>
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+                <Card className="h-full w-full min-w-0 bg-card transition-shadow duration-300 hover:shadow-lg">
+                    <CardHeader className="pb-2">
                         <CardTitle className="flex items-center gap-2">
                             <TrendingUp className="size-4 text-primary" />
                             Historical Performance
                         </CardTitle>
-                        <CardDescription></CardDescription>
                     </CardHeader>
-                    <CardContent className="min-w-0">
-                        <div className="mx-auto my-auto w-full min-w-0">
+                    <CardContent className="min-w-0 pt-0">
+                        <div className="mx-auto w-full min-w-0">
                             <LineChart />
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="h-full w-full min-w-0 bg-card/80 transition-shadow duration-300 hover:shadow-lg">
-                    <CardHeader>
+                <Card className="h-full w-full min-w-0 bg-card transition-shadow duration-300 hover:shadow-lg">
+                    <CardHeader className="pb-2">
                         <CardTitle className="flex items-center gap-2">
                             <ChartLine className="size-4 text-primary" />
                             Projected Performance
                         </CardTitle>
-                        <CardDescription></CardDescription>
                     </CardHeader>
-                    <CardContent className="min-w-0">
-                        <div className="mx-auto my-auto w-full min-w-0">
+                    <CardContent className="min-w-0 pt-0">
+                        <div className="mx-auto w-full min-w-0">
                             <LineChart />
                         </div>
                     </CardContent>
                 </Card>
             </div>
-            <div className='grid grid-cols-1 gap-4 rounded-lg pt-2 sm:grid-cols-2'>
-                <div className="space-y-1">
-                    <p className="flex items-center gap-2 text-sm font-semibold">
+            <div className="grid grid-cols-1 gap-3 rounded-lg md:grid-cols-2">
+                <div className="space-y-1 text-sm text-muted-foreground">
+                    <p className="flex items-center gap-2 font-semibold text-foreground">
                         <UserRound className="size-4 text-primary" />
                         Employee ID: EMP-00{auth.user.id}
                     </p>
-                    <p className="flex items-center gap-2 text-sm font-semibold">
+                    <p className="flex items-center gap-2 font-semibold text-foreground">
                         <UserRound className="size-4 text-primary" />
                         Name: {auth.user.name}
                     </p>
                 </div>
-                <div className='space-y-1 sm:text-right'>
-                    <p className="flex items-center justify-start gap-2 text-sm font-semibold sm:justify-end">
+                <div className="space-y-1 text-sm text-muted-foreground sm:text-right">
+                    <p className="flex items-center justify-start gap-2 font-semibold text-foreground sm:justify-end">
                         <Briefcase className="size-4 text-primary" />
                         Position: {auth.user.role || 'N/A'}
                     </p>
-                    <p className="flex items-center justify-start gap-2 text-sm font-semibold sm:justify-end">
+                    <p className="flex items-center justify-start gap-2 sm:justify-end">
                         Remarks: Consistent communicator with room to improve delivery under pressure.
                     </p>
                 </div>
             </div>
         </div>
-    </>);
+    );
 }

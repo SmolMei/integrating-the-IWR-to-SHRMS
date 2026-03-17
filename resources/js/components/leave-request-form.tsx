@@ -1,5 +1,5 @@
 import { useForm } from '@inertiajs/react';
-import { addDays, addMonths, differenceInCalendarDays, format } from 'date-fns';
+import { addDays, addMonths, differenceInCalendarDays, format, startOfDay } from 'date-fns';
 import { CalendarDays, FileCheck2, ShieldCheck, Upload } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import InputError from '@/components/input-error';
@@ -180,6 +180,40 @@ export default function LeaveRequestForm() {
     const shouldShowSupportingDocuments =
         shouldUploadMedicalCertificate || shouldUploadMarriageCertificate || shouldUploadSoloParentId;
 
+    const dateNoticeMessage = useMemo(() => {
+        if (!startDate) {
+            return undefined;
+        }
+
+        const today = startOfDay(new Date());
+        const leadTimeDays = differenceInCalendarDays(startDate, today);
+
+        if (leadTimeDays < 0) {
+            return 'Start date cannot be in the past.';
+        }
+
+        const vacationNoticeTypes = new Set([
+            'vacation-leave',
+            'force-leave',
+            'special-privilege-leave',
+            'wellness-leave',
+        ]);
+
+        if (vacationNoticeTypes.has(selectedLeaveType) && leadTimeDays < 5) {
+            return 'Application must be submitted 5 days before intended leave.';
+        }
+
+        if (selectedLeaveType === 'maternity-leave' && leadTimeDays < 30) {
+            return 'Maternity leave must be submitted 1 month before expected delivery.';
+        }
+
+        if (selectedLeaveType === 'paternity-leave' && leadTimeDays < 30) {
+            return 'Paternity leave must be submitted 1 month before expected delivery.';
+        }
+
+        return undefined;
+    }, [selectedLeaveType, startDate]);
+
     const dateValidationMessage = useMemo(() => {
         if (!startDate || !endDate || !exceedsConfiguredLimit) {
             return undefined;
@@ -264,12 +298,12 @@ export default function LeaveRequestForm() {
     };
 
     return (
-        <div className="animate-fade-in container mx-auto my-3 max-w-5xl space-y-4 p-6">
+        <div>
             <div className="mb-2 flex items-center justify-between">
-                <div>
+                <div className ="animate-fade-in-down">
                     <h1 className="flex items-center gap-2 text-3xl font-bold">
                         <CalendarDays className="h-8 w-8" />
-                        Leave Application
+                        Leave Request Form
                     </h1>
                     <p className="mt-1 text-muted-foreground">Submit leave requests based on office leave policy rules.</p>
                 </div>
@@ -325,7 +359,7 @@ export default function LeaveRequestForm() {
                                     onChange={handleStartDateChange}
                                     placeholder="Select start date"
                                 />
-                                <InputError message={errors.startDate} />
+                                <InputError message={dateNoticeMessage ?? errors.startDate} />
                             </div>
                             <div className="flex min-w-0 flex-col gap-2">
                                 <Label htmlFor="endDate">End Date</Label>
@@ -438,7 +472,11 @@ export default function LeaveRequestForm() {
                             <Button type="button" variant="destructive" onClick={handleReset}>
                                 Cancel
                             </Button>
-                            <Button type="button" variant="default" disabled={Boolean(dateValidationMessage)}>
+                            <Button
+                                type="button"
+                                variant="default"
+                                disabled={Boolean(dateValidationMessage || dateNoticeMessage)}
+                            >
                                 Submit Request
                             </Button>
                         </div>

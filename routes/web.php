@@ -30,6 +30,10 @@ Route::post('leave-application', [LeaveRequestController::class, 'store'])
     ->middleware(['auth', 'verified', 'role:employee'])
     ->name('leave-application.store');
 
+Route::get('submit-evaluation', function () {
+    return Inertia::render('submit-evaluation');
+})->middleware(['auth', 'verified', 'role:employee'])->name('submit-evaluation');
+
 Route::get('notifications', function () {
     return Inertia::render('notifications');
 })->middleware(['auth', 'verified', 'role:employee,evaluator'])->name('notifications');

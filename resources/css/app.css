@@ -357,7 +357,6 @@
 }
 
 :root {
-    --main-background-image: url('/images/main-background.png');
     --background: #FBFBFE;
     --foreground: #1b1b18;
     --card: #FBFBFE;
@@ -394,15 +393,14 @@
 }
 
 .dark {
-    --main-background-image: url('/images/dark-main-background.png');
-    --background: #0a0a0a;
+    --background: #0a1630;
     --foreground: #EDEDEC;
-    --card: #0a0a0a;
+    --card: #0e1b3a;
     --card-foreground: #EDEDEC;
-    --popover: #0a0a0a;
+    --popover: #0e1b3a;
     --popover-foreground: #EDEDEC;
     --primary: #91C383;
-    --primary-foreground: #0a0a0a;
+    --primary-foreground: #0a1630;
     --secondary: #4A7C3C;
     --secondary-foreground: #EDEDEC;
     --muted: #4A7C3C;
@@ -419,10 +417,10 @@
     --chart-3: #D7B35D;
     --chart-4: #7DAEC8;
     --chart-5: #D98A63;
-    --sidebar: #0a0a0a;
+    --sidebar: #0a1630;
     --sidebar-foreground: #EDEDEC;
     --sidebar-primary: #91C383;
-    --sidebar-primary-foreground: #0a0a0a;
+    --sidebar-primary-foreground: #0a1630;
     --sidebar-accent: #4A7C3C;
     --sidebar-accent-foreground: #EDEDEC;
     --sidebar-border: #4A7C3C;
@@ -440,13 +438,6 @@
 }
 
 @layer utilities {
-    .bg-main-background {
-        background-image: var(--main-background-image);
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-
     .anim-stagger-1 {
         animation-delay: 120ms;
     }
@@ -486,6 +477,47 @@
 
     .notif-delay-2 {
         animation-delay: 180ms;
+    }
+
+    .bg-video {
+        position: relative;
+        overflow: hidden;
+        background-color: #0a1630;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .bg-video__media {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .bg-video__overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(180deg, rgb(255 255 255 / 0.62) 0%, rgb(248 250 252 / 0.82) 100%);
+        backdrop-filter: blur(10px) saturate(115%);
+    }
+
+    .dark .bg-video__media {
+        filter: brightness(0.65) saturate(0.9);
+    }
+
+    .dark .bg-video__overlay {
+        background: linear-gradient(180deg, rgb(6 14 32 / 0.65) 0%, rgb(6 14 32 / 0.85) 100%);
+        backdrop-filter: blur(4px) saturate(100%);
+    }
+
+    .bg-video__content {
+        position: relative;
+        z-index: 2;
     }
 
     @media (prefers-reduced-motion: reduce) {

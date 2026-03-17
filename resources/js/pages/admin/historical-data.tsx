@@ -43,7 +43,7 @@ export default function HistoricalData({
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Historical Data" />
-            <div className="mx-auto my-auto flex w-full flex-col gap-6 p-4 lg:items-stretch">
+            <div className="mx-auto flex w-full flex-col gap-6 p-4 lg:items-stretch">
                 <HistoricalDataTable historicalData={historicalData} search={search} pagination={pagination} />
             </div>
         </AppLayout>

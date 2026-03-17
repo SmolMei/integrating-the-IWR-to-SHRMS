@@ -9,12 +9,26 @@ export default function AppSidebarLayout({
     breadcrumbs = [],
 }: AppLayoutProps) {
     return (
-        <AppShell variant="sidebar">
-            <AppSidebar />
-            <AppContent variant="sidebar" className="bg-main-background h-auto w-full overflow-x-hidden">
-                <AppSidebarHeader breadcrumbs={breadcrumbs}/>
-                {children}
-            </AppContent>
-        </AppShell>
+        <div className="bg-video min-h-svh w-full">
+            <video
+                className="bg-video__media"
+                autoPlay
+                muted
+                loop
+                playsInline
+            >
+                <source src="/videos/background-video.mp4" type="video/mp4" />
+            </video>
+            <div className="bg-video__overlay" />
+            <div className="bg-video__content min-h-svh">
+                <AppShell variant="sidebar">
+                    <AppSidebar />
+                    <AppContent variant="sidebar" className="h-auto w-full overflow-x-hidden bg-transparent">
+                        <AppSidebarHeader breadcrumbs={breadcrumbs}/>
+                        {children}
+                    </AppContent>
+                </AppShell>
+            </div>
+        </div>
     );
 }

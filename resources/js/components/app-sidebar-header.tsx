@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useCurrentTime } from '@/hooks/use-current-time';
 import type { BreadcrumbItem as BreadcrumbItemType } from '@/types';
+import { ModeToggle } from './ui/mode-toggle';
 
 export function AppSidebarHeader({
     breadcrumbs = [],
@@ -17,10 +18,13 @@ export function AppSidebarHeader({
                 <SidebarTrigger className="-ml-1" />
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
             </div>
+            <div className="flex items-center gap-4">
             <Badge variant="outline" className="bg-primary px-4 py-2 text-primary-foreground">
                     <Clock className="mr-1 h-8 w-8" />
                     {currentTime}
             </Badge>
+                <ModeToggle />
+            </div>
         </header>
     );
 }

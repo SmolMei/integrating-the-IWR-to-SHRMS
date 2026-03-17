@@ -40,7 +40,7 @@ export default function DocumentManagement({
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Document Management" />
-            <div className="p-4 mx-auto my-auto flex w-full flex-col gap-6 lg:items-stretch">
+            <div className="p-4 mx-auto flex w-full flex-col gap-6 lg:items-stretch">
                 <DocumentsTable employees={employees} search={search} pagination={pagination} />
             </div>
         </AppLayout>

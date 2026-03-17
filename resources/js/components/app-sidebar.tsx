@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Bell, CalendarClock, ClipboardCheck, FileStack, FileUser, Grid, PieChart, Users } from 'lucide-react';
+import { Bell, CalendarClock, ClipboardCheck, FileStack, FileUser, Grid, PieChart, Send, Users } from 'lucide-react';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -11,7 +11,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, attendance, leaveApplication, documentManagement, performanceDashboard, notifications } from '@/routes';
+import { dashboard, attendance, leaveApplication, documentManagement, performanceDashboard, notifications, submitEvaluation } from '@/routes';
 import * as admin from '@/routes/admin';
 import type { Auth, NavItem } from '@/types';
 import AppLogo from './app-logo';
@@ -31,6 +31,11 @@ const employeeNavItems: NavItem[] = [
         title:'Attendance',
         href: attendance(),
         icon: ClipboardCheck,
+    },
+    {
+        title: 'Form Submission',
+        href: submitEvaluation(),
+        icon: Send,
     },
     {
         title: 'Notifications',
@@ -111,7 +116,7 @@ export function AppSidebar() {
             : dashboard();
 
     return (
-        <Sidebar collapsible="icon" variant="sidebar">
+        <Sidebar collapsible="icon" variant="sidebar" >
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>

@@ -15,7 +15,9 @@ export default function Attendance() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Attendance" />
-            <AttendanceCard />
+            <div className="mx-auto w-full max-w-6xl px-4 pb-10 pt-6">
+                <AttendanceCard />
+            </div>
         </AppLayout>
     );
 }

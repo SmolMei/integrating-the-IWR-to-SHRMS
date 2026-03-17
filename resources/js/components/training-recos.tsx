@@ -66,28 +66,30 @@ const recommendations = [
 ];
 
 export default function TrainingRecommendations() {
-    return (<>
-        <div className="animate-fade-in col-span-2 h-full w-full overflow-hidden rounded-xl border border-border bg-card/80 p-4 shadow-xl transition-shadow duration-300 hover:shadow-2xl">
-            <h1 className='my-6 ml-6 flex items-center gap-2 font-bold'>
+    return (
+        <div className="animate-fade-in-right flex w-full flex-col gap-3 overflow-hidden rounded-xl border border-border bg-card/80 p-4 shadow-xl transition-shadow duration-300 hover:shadow-2xl sm:gap-4">
+            <h1 className="flex items-center gap-2 text-base font-bold sm:text-lg">
                 <BookOpen className="size-5 text-primary" />
                 Training Recommendations
             </h1>
-            <p className="ml-6 text-sm">Suggested learning programs based on current performance trends and priority skill gaps.</p>
-            <div className="mx-6 mt-3 h-1 rounded-full bg-gradient-to-r from-primary/60 via-secondary/60 to-primary/60" />
-            <div className='mt-4 mx-6'>
+            <p className="text-sm text-muted-foreground">
+                Suggested learning programs based on current performance trends and priority skill gaps. Prioritize programs that align with your role goals and the most frequent coaching feedback.
+            </p>
+            <div className="mx-4 mt-2 h-1 rounded-full bg-gradient-to-r from-primary/60 via-secondary/60 to-primary/60 sm:mx-6" />
+            <div className="mt-2">
                 <Carousel className="w-full max-w-none px-2 sm:px-4 lg:px-6">
-                    <CarouselContent className='-ml-2 md:-ml-4'>
+                    <CarouselContent className="-ml-2 md:-ml-4">
                         {recommendations.map((reco) => (
-                            <CarouselItem key={reco.id} className='basis-full md:basis-1/2 lg:basis-1/3'>
-                                <Card className="group h-full bg-card/80 transition-shadow duration-300 hover:shadow-lg">
-                                    <CardHeader>
+                            <CarouselItem key={reco.id} className="basis-full 2xl:basis-1/2">
+                                <Card className="group bg-card/80 py-4 shadow-sm transition-shadow duration-300 hover:shadow-lg">
+                                    <CardHeader className="px-4">
                                         <CardTitle>{reco.title}</CardTitle>
                                         <CardDescription className="flex items-center gap-2">
                                             <Clock3 className="size-4 text-muted-foreground" />
                                             {reco.date} | {reco.time}
                                         </CardDescription>
                                     </CardHeader>
-                                    <CardContent className="space-y-2 text-sm">
+                                    <CardContent className="space-y-1 px-4 text-sm">
                                         <p>{reco.description}</p>
                                         <p className="flex items-start gap-2">
                                             <MapPin className="mt-0.5 size-4 shrink-0 text-primary" />
@@ -110,7 +112,6 @@ export default function TrainingRecommendations() {
                     <CarouselNext className="right-0 sm:-right-4" />
                 </Carousel>
             </div>
-            <p className="mt-4 ml-6 text-sm">Prioritize programs that align with your role goals and the most frequent coaching feedback.</p>
         </div>
-    </>);
+    );
 }

@@ -1,5 +1,9 @@
-import { BrainCircuit, Sparkles } from 'lucide-react';
+import { dashboard, home, login, performanceDashboard, register } from '@/routes';
+import { BrainCircuit, LayoutDashboard, LogIn, Sparkles, UserPlus } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import * as admin from '@/routes/admin';
+import { Link, usePage } from '@inertiajs/react';
+import type { User } from '@/types';
 
 type TiltState = {
     spinX: number;
@@ -18,6 +22,16 @@ const defaultTilt: TiltState = {
 const logoSideDepthLayers = Array.from({ length: 16 }, (_, index) => 44 + index * 1.6);
 
 export default function HomepageSection() {
+    const { auth, canRegister } = usePage<{ auth: { user: User | null }; canRegister?: boolean }>().props;
+    const user = auth?.user ?? null;
+    const registrationEnabled = canRegister ?? false;
+
+    const dashboardLink = user?.role === 'hr-personnel'
+        ? admin.performanceDashboard()
+        : user?.role === 'evaluator'
+            ? performanceDashboard()
+            : dashboard();
+
     const [tilt, setTilt] = useState<TiltState>(defaultTilt);
     const [isDragging, setIsDragging] = useState<boolean>(false);
     const lastPointer = useRef<{ x: number; y: number } | null>(null);
@@ -114,23 +128,61 @@ export default function HomepageSection() {
     }, [isDragging]);
 
     return (
-        <section className="bg-main-background relative flex h-auto w-full overflow-x-hidden bg-card/80 py-16 dark:bg-black/70 md:py-20">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_24%,rgba(145,195,131,0.28),transparent_42%),radial-gradient(circle_at_88%_75%,rgba(74,124,60,0.22),transparent_46%)]" />
-
-            <div className="relative mx-auto grid w-full max-w-[1500px] grid-cols-1 items-center gap-10 px-6 md:px-10 xl:grid-cols-12">
+        <section className="bg-video relative flex h-auto w-full overflow-x-hidden py-16 md:py-20">
+            <video
+                className="bg-video__media"
+                autoPlay
+                muted
+                loop
+                playsInline
+            >
+                <source src="/videos/background-video.mp4" type="video/mp4" />
+            </video>
+            <div className="bg-video__overlay" />
+            <div className="bg-video__content relative mx-auto grid w-full max-w-[1500px] grid-cols-1 items-center gap-10 px-6 md:px-10 xl:grid-cols-12">
                 <div className="xl:col-span-6">
-                    <span className="animate-fade-in-up inline-flex items-center gap-2 rounded-full border border-primary/30 bg-background/75 px-4 py-1 text-sm font-semibold text-primary">
+                    <span className="animate-fade-in-up inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/75 dark:bg-background/75 px-4 py-1 text-sm font-semibold text-white dark:text-primary">
                         <Sparkles className="size-4" />
                         Algorithmic Decision Support
                     </span>
-                    <h1 className="animate-fade-in-down mx-auto w-full max-w-4xl py-4 text-center text-4xl font-bold tracking-tight sm:text-6xl xl:mx-0 xl:text-left xl:text-7xl">
+                    <h1 className="animate-fade-in-down mx-auto w-full max-w-4xl py-4 text-center text-4xl font-bold tracking-tight sm:text-5xl xl:mx-0 xl:text-left xl:text-6xl">
                         Smart Human Resource Management System
                     </h1>
-                    <p className="animate-fade-in-down mx-auto flex max-w-2xl items-start gap-2 pb-2 pt-4 text-center text-xl font-bold text-primary md:text-2xl xl:mx-0 xl:text-left">
+                    <p className="animate-fade-in-down mx-auto text-primary flex max-w-2xl items-start gap-2 pb-2 pt-4 text-center text-lg font-bold text-primary md:text-xl xl:mx-0 xl:text-left">
                         <BrainCircuit className="mt-1 hidden size-6 shrink-0 md:block" />
                         Streamline your HR processes with our comprehensive Human Resource Management System powered by
                         algorithmic approaches.
                     </p>
+                    <div className="animate-fade-in-down mx-auto my-6 flex w-full flex-col items-center justify-center gap-3 text-center sm:w-auto sm:flex-row sm:flex-wrap xl:items-start xl:justify-start xl:text-left">
+                        {user ? (
+                            <Link
+                                href={dashboardLink}
+                                className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors duration-300 hover:bg-primary/90 sm:w-auto sm:min-w-[10rem] sm:text-base"
+                            >
+                                <LayoutDashboard className="size-4" />
+                                Dashboard
+                            </Link>
+                        ) : (
+                            <>
+                                <Link
+                                    href={login()}
+                                    className="inline-flex w-full animate-fade-in-right items-center justify-center gap-2 rounded-md border-2 border-primary bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground transition-colors duration-300 ease-in-out hover:bg-primary hover:text-primary-foreground sm:w-auto sm:min-w-[10rem] sm:text-base"
+                                >
+                                    <LogIn className="size-4" />
+                                    Login
+                                </Link>
+                                {registrationEnabled && (
+                                    <Link
+                                        href={register()}
+                                        className="inline-flex w-full animate-fade-in-right items-center justify-center gap-2 rounded-md border-2 border-primary-foreground bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors duration-300 ease-in-out hover:bg-primary/90 sm:w-auto sm:min-w-[10rem] sm:text-base"
+                                    >
+                                        <UserPlus className="size-4" />
+                                        Register
+                                    </Link>
+                                )}
+                            </>
+                        )}
+                    </div>
                 </div>
 
                 <div className="xl:col-span-6">

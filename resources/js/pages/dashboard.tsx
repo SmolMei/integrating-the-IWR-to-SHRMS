@@ -19,8 +19,8 @@ export default function Dashboard() {
             <Head title="Personalized Dashboard" />
             <div className="p-4 mx-auto flex w-full flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-stretch">
                 <QuarterPerformanceTrends />
-                <PredictivePerformance />
                 <TrainingRecommendations />
+                <PredictivePerformance />
             </div>
         </AppLayout>
     );

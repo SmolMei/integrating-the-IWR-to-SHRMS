@@ -1,20 +1,33 @@
 import { ShieldAlert, TriangleAlert } from 'lucide-react';
 import { DoughnutChart } from '@/components/ui/doughnut-chart';
+import { Badge } from '@/components/ui/badge';
 
 export default function RiskEmployeeAlert() {
     return (
-        <div className="animate-fade-in-right flex w-full min-w-0 flex-1 flex-col rounded-xl border border-border bg-card/80 p-4 shadow-xl transition-shadow duration-300 hover:shadow-2xl">
-                <h1 className='my-6 ml-6 flex w-fit items-center gap-2 rounded-md px-2 py-1 font-bold'>
+        <div className="animate-fade-in-right flex w-full min-w-0 flex-1 flex-col gap-4 rounded-xl border border-border bg-card/80 p-4 shadow-xl transition-shadow duration-300 hover:shadow-2xl sm:gap-5">
+            <div className="flex flex-col gap-3">
+                <h1 className="flex items-center gap-2 text-base font-bold sm:text-lg lg:whitespace-nowrap">
                     <ShieldAlert className="size-5 text-primary" />
                     Employee Risk Alert
                 </h1>
-                <div className="w-full px-2 sm:px-4">
-                    <DoughnutChart />
+                <div className="flex flex-wrap gap-2">
+                    <Badge variant="outline" className="border-primary/40 text-primary px-4 py-2">
+                        High Risk: 6
+                    </Badge>
+                    <Badge variant="outline" className="border-muted-foreground/40 text-muted-foreground px-4 py-2">
+                        Monitoring: 18
+                    </Badge>
                 </div>
-                <p className="mt-4 ml-6 flex items-center gap-2 text-sm">
-                    <TriangleAlert className="size-4 text-muted-foreground" />
-                    Snapshot of employees who may need immediate support based on recent performance patterns.
-                </p>
+            </div>
+
+            <div className="mx-auto w-full max-w-[22rem] sm:max-w-none sm:px-4">
+                <DoughnutChart />
+            </div>
+            <div className="mx-6 mt-2 h-1 rounded-full bg-gradient-to-r from-primary/40 via-secondary/80 to-primary/40" />
+            <div className="ml-6 flex items-start gap-2 text-sm text-muted-foreground sm:text-left">
+                <TriangleAlert className="mt-0.5 size-4 shrink-0" />
+                Snapshot of employees who may need immediate support based on recent performance patterns.
+            </div>
         </div>
     );
 }

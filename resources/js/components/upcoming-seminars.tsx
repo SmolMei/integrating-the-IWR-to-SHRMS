@@ -17,14 +17,14 @@ export default function UpcomingSeminars({ seminars }: { seminars: Seminar[] }) 
     const upcomingSeminars = seminars.slice(0, 10);
 
     return (
-        <div className="animate-fade-in col-span-2 col-start-1 col-end-3 h-full w-full overflow-hidden rounded-xl border border-border bg-background/80 p-4 shadow-xl transition-shadow duration-300 hover:shadow-2xl">
-            <h1 className="my-6 ml-6 flex items-center gap-2 font-bold">
+        <div className="animate-fade-in col-span-2 col-start-1 col-end-3 flex w-full flex-col gap-3 overflow-hidden rounded-xl border border-border bg-background/80 p-4 shadow-xl transition-shadow duration-300 hover:shadow-2xl sm:gap-4">
+            <h1 className="flex items-center gap-2 text-base font-bold sm:text-lg">
                 <CalendarDays className="size-5 text-primary" />
                 Upcoming Seminars and Trainings
             </h1>
-            <p className="ml-6 text-sm">Scheduled learning events you can join in the coming weeks.</p>
+            <p className="text-sm text-muted-foreground">Scheduled learning events you can join in the coming weeks.</p>
 
-            <div className="mx-6 mt-4">
+            <div className="mt-2 sm:mt-3">
                 <Carousel className="w-full max-w-none px-2 sm:px-4 lg:px-6">
                     <CarouselContent className="-ml-2 md:-ml-4">
                         {upcomingSeminars.length === 0 && (

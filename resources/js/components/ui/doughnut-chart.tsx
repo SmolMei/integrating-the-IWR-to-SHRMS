@@ -81,7 +81,7 @@ export const data = {
  */
 export function DoughnutChart() {
   return (
-    <div className="relative mx-auto h-56 w-full max-w-xs sm:h-64 sm:max-w-sm md:h-72 md:max-w-md lg:h-80 lg:max-w-lg">
+    <div className="relative mx-auto h-52 w-full max-w-xs sm:h-56 sm:max-w-sm md:h-60 md:max-w-md lg:h-64 lg:max-w-lg">
       <Doughnut options={options} data={data} />
     </div>
   );

@@ -15,7 +15,9 @@ export default function LeaveApplication() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Leave Application" />
-            <LeaveRequestForm />
+             <div className="mx-auto w-full max-w-6xl px-4 pb-10 pt-6">
+               <LeaveRequestForm />
+            </div>
         </AppLayout>
     );
 }

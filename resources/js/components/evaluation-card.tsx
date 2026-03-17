@@ -117,24 +117,6 @@ export default function EvaluationCard() {
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                <div className="animate-fade-in-up rounded-md border border-border bg-muted/40 px-4 py-3">
-                    <div className="space-y-2">
-                        <Label htmlFor="average-score">Average Score</Label>
-                        <Input
-                            id="average-score"
-                            value={averageScore.toFixed(2)}
-                            readOnly
-                            className="max-w-xs bg-background font-semibold text-primary"
-                        />
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                        Rated criteria: {ratedScores.length} / {evaluationCriteria.length}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                        Evaluator remarks will appear when average score is below 3.00.
-                    </p>
-                </div>
-
                 <div className="animate-fade-in-up anim-stagger-1 w-full overflow-x-auto rounded-md border border-border">
                     <Table className="min-w-[1200px] [&_td]:border-r [&_td]:border-border [&_td:last-child]:border-r-0 [&_th]:border-r [&_th]:border-border [&_th:last-child]:border-r-0">
                         <TableHeader>
@@ -194,14 +176,29 @@ export default function EvaluationCard() {
                         />
                     </div>
                 </div>
+                <div className="flex flex-col gap-4 md:flex-row md:justify-between">
+                    <div className="animate-fade-in-up rounded-md bg-muted/40 md:max-w-xl">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+                            <Label htmlFor="average-score" className="text-sm font-medium">
+                                Average Score:
+                            </Label>
+                            <Input
+                                id="average-score"
+                                value={averageScore.toFixed(2)}
+                                readOnly
+                                className="h-9 w-full bg-background font-semibold text-primary sm:w-48"
+                            />
+                        </div>
+                    </div>
 
-                <div className="animate-fade-in-up anim-stagger-3 flex flex-wrap items-center justify-end gap-3">
-                    <Button type="button" variant="destructive" onClick={resetForm} className="w-32">
-                        Reset
-                    </Button>
-                    <Button type="button" variant="default" className="animate-pulse-glow w-40">
-                        Save Evaluation
-                    </Button>
+                    <div className="animate-fade-in-up anim-stagger-3 flex flex-wrap justify-end gap-3">
+                        <Button type="button" variant="destructive" onClick={resetForm} className="w-32">
+                            Reset
+                        </Button>
+                        <Button type="button" variant="default" className="animate-pulse-glow w-40">
+                            Save Evaluation
+                        </Button>
+                    </div>
                 </div>
             </CardContent>
         </Card>

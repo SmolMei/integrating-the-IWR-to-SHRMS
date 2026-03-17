@@ -10,7 +10,7 @@ export default function AppHeaderLayout({
     return (
         <AppShell>
             <AppHeader breadcrumbs={breadcrumbs} />
-            <AppContent className="bg-main-background min-h-screen w-full overflow-x-hidden">
+            <AppContent className="min-h-screen w-full overflow-x-hidden">
                 {children}
             </AppContent>
         </AppShell>

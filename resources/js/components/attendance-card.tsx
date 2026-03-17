@@ -90,9 +90,9 @@ export default function AttendanceCard() {
     };
 
     return (
-        <div className="animate-fade-in container mx-auto my-3 max-w-5xl space-y-4 p-6">
+        <div>
             <div className="mb-2 flex items-center justify-between">
-                <div>
+                <div className="animate-fade-in-down">
                     <h1 className="flex items-center gap-2 text-3xl font-bold">
                         <Fingerprint className="h-8 w-8" />
                         Fingerprint Attendance

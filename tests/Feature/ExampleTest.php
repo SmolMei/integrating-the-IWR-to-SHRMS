@@ -1,7 +1,11 @@
 <?php
 
-test('returns a successful response', function () {
-    $response = $this->get(route('home'));
+use Inertia\Testing\AssertableInertia as Assert;
 
-    $response->assertOk();
+test('home page renders the welcome component', function () {
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('welcome')
+            ->has('canRegister'));
 });
