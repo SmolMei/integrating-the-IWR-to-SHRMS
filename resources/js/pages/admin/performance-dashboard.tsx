@@ -26,7 +26,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function AdminPerformanceDashboard({ seminars }: { seminars: Seminar[] }) {
+type Remark = {
+    employeeId: string;
+    date: string;
+    remark: string;
+};
+
+export default function AdminPerformanceDashboard({ seminars, remarks }: { seminars: Seminar[]; remarks?: Remark[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Performance Dashboard" />
@@ -35,7 +41,7 @@ export default function AdminPerformanceDashboard({ seminars }: { seminars: Semi
                 <RiskEmployeeAlert />
                 <UpcomingSeminars seminars={seminars} />
                 <DailyAttendanceLogs />
-                <EmployeeRemarks />
+                <EmployeeRemarks remarks={remarks} />
             </div>
         </AppLayout>
     );

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { router } from "@inertiajs/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -82,9 +83,27 @@ const ratingScale = ["1", "2", "3", "4", "5"];
 
 type RatingMap = Record<string, string>;
 
-export default function EvaluationCard() {
-    const [remarks, setRemarks] = useState("");
+type SubmissionData = {
+    id: number;
+    performance_rating: number | null;
+    status: string | null;
+    stage: string | null;
+    evaluator_gave_remarks: boolean;
+    remarks?: string | null;
+    notification: string | null;
+};
+
+type EvaluationCardProps = {
+    employeeId?: string;
+    employeeName?: string;
+    submission?: SubmissionData | null;
+};
+
+export default function EvaluationCard({ employeeId, employeeName, submission }: EvaluationCardProps) {
+    const isCompleted = submission?.performance_rating != null;
+    const [remarks, setRemarks] = useState(submission?.remarks ?? "");
     const [ratings, setRatings] = useState<RatingMap>({});
+    const [processing, setProcessing] = useState(false);
 
     const ratedScores = useMemo<number[]>(() => {
         return Object.values(ratings)
@@ -108,12 +127,75 @@ export default function EvaluationCard() {
         setRatings({});
     };
 
+    const handleSave = (): void => {
+        if (!employeeId || ratedScores.length === 0) return;
+
+        setProcessing(true);
+        router.post(
+            "/ipcr/evaluate",
+            {
+                employee_id: employeeId,
+                performance_rating: averageScore,
+                evaluator_gave_remarks: remarks.trim().length > 0,
+                remarks: remarks.trim() || null,
+            },
+            {
+                onFinish: () => setProcessing(false),
+            }
+        );
+    };
+
+    if (isCompleted) {
+        return (
+            <Card className="animate-zoom-in-soft hover-lift-soft mx-auto w-full max-w-7xl rounded-xl border border-border bg-card/80 shadow-xl">
+                <CardHeader className="animate-slide-in-down">
+                    <CardTitle>Evaluation Results</CardTitle>
+                    <CardDescription>
+                        {employeeName ? `${employeeName} (${employeeId})` : "Employee Evaluation"}
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="rounded-lg border border-border bg-muted/40 p-4">
+                            <p className="text-sm text-muted-foreground">Performance Rating</p>
+                            <p className="text-2xl font-bold text-primary">
+                                {Number(submission!.performance_rating).toFixed(2)}
+                            </p>
+                        </div>
+                        <div className="rounded-lg border border-border bg-muted/40 p-4">
+                            <p className="text-sm text-muted-foreground">Status</p>
+                            <p className="text-lg font-semibold capitalize">{submission!.status ?? "N/A"}</p>
+                        </div>
+                        <div className="rounded-lg border border-border bg-muted/40 p-4">
+                            <p className="text-sm text-muted-foreground">Stage</p>
+                            <p className="text-lg font-semibold capitalize">{submission!.stage ?? "N/A"}</p>
+                        </div>
+                    </div>
+                    {submission!.evaluator_gave_remarks && submission!.remarks && (
+                        <div className="rounded-lg border border-border bg-muted/40 p-4">
+                            <p className="mb-1 text-sm text-muted-foreground">Evaluator Remarks</p>
+                            <p className="text-sm">{submission!.remarks}</p>
+                        </div>
+                    )}
+                    {submission!.notification && (
+                        <div className="rounded-lg border border-border bg-muted/40 p-4">
+                            <p className="mb-1 text-sm text-muted-foreground">IWR Routing Decision</p>
+                            <p className="text-sm">{submission!.notification}</p>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+        );
+    }
+
     return (
         <Card className="animate-zoom-in-soft hover-lift-soft mx-auto w-full max-w-7xl rounded-xl border border-border bg-card/80 shadow-xl">
             <CardHeader className="animate-slide-in-down">
-                <CardTitle>Indivdual Performance Commitment and Review</CardTitle>
+                <CardTitle>Individual Performance Commitment and Review</CardTitle>
                 <CardDescription>
-                    Rate each criterion from 1 (lowest) to 5 (highest).
+                    {employeeName
+                        ? `Evaluating: ${employeeName} (${employeeId})`
+                        : "Rate each criterion from 1 (lowest) to 5 (highest)."}
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -195,8 +277,14 @@ export default function EvaluationCard() {
                         <Button type="button" variant="destructive" onClick={resetForm} className="w-32">
                             Reset
                         </Button>
-                        <Button type="button" variant="default" className="animate-pulse-glow w-40">
-                            Save Evaluation
+                        <Button
+                            type="button"
+                            variant="default"
+                            className="animate-pulse-glow w-40"
+                            disabled={!employeeId || ratedScores.length === 0 || processing}
+                            onClick={handleSave}
+                        >
+                            {processing ? "Saving..." : "Save Evaluation"}
                         </Button>
                     </div>
                 </div>

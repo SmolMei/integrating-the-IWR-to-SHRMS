@@ -19,6 +19,12 @@ type Seminar = {
     date: string;
 };
 
+type Remark = {
+    employeeId: string;
+    date: string;
+    remark: string;
+};
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Performance Dashboard',
@@ -26,7 +32,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function PerformanceDashboard({ seminars }: { seminars: Seminar[] }) {
+export default function PerformanceDashboard({ seminars, remarks }: { seminars: Seminar[]; remarks?: Remark[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Performance Dashboard" />
@@ -35,7 +41,7 @@ export default function PerformanceDashboard({ seminars }: { seminars: Seminar[]
                 <RiskEmployeeAlert />
                 <UpcomingSeminars seminars={seminars} />
                 <DailyAttendanceLogs />
-                <EmployeeRemarks />
+                <EmployeeRemarks remarks={remarks} />
             </div>
         </AppLayout>
     );
