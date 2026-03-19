@@ -26,3 +26,14 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# IWR Python subsystem
+/iwr/data/
+/iwr/models/
+/iwr/__pycache__/
+/iwr/.env
+/iwr/.venv/
+
+# Node.js middleware
+/node-middleware/node_modules/
+/node-middleware/.env
