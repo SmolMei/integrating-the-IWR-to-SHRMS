@@ -1,63 +1,81 @@
 import NotificationSnackbar from '@/components/notification-snackbar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import type { NotificationItem } from '@/types';
 
-export default function NotificationsTabs() {
+type NotificationsTabsProps = {
+    notifications?: NotificationItem[];
+};
+
+function getNotificationType(item: NotificationItem): 'info' | 'warning' | 'success' {
+    if (item.isImportant) return 'warning';
+    if (item.type.includes('completed') || item.type.includes('approved')) return 'success';
+    return 'info';
+}
+
+export default function NotificationsTabs({ notifications = [] }: NotificationsTabsProps) {
+    const unreadNotifications = notifications.filter((n) => !n.isRead);
+    const importantNotifications = notifications.filter((n) => n.isImportant);
+
     return (
         <Tabs defaultValue="all" className="w-full">
             <TabsList>
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="unread">
-                    Unread <Badge className="ml-2">5</Badge>
+                    Unread {unreadNotifications.length > 0 && <Badge className="ml-2">{unreadNotifications.length}</Badge>}
                 </TabsTrigger>
                 <TabsTrigger value="important">Important</TabsTrigger>
             </TabsList>
 
             <TabsContent value="all" className="mt-4 space-y-4">
-                <NotificationSnackbar
-                    title="Leave Request Approved"
-                    message="Your leave request for March 18, 2026 has been approved."
-                    time="2 minutes ago"
-                    type="success"
-                />
-
-                <NotificationSnackbar
-                    title="Evaluation Reminder"
-                    message="Please complete your pending employee evaluations before Friday."
-                    time="10 minutes ago"
-                    type="warning"
-                />
-
-                <NotificationSnackbar
-                    title="System Update"
-                    message="New analytics widgets are now available in your performance dashboard."
-                    time="Today, 8:40 AM"
-                    type="info"
-                />
+                {notifications.length === 0 ? (
+                    <p className="py-8 text-center text-muted-foreground">No notifications yet.</p>
+                ) : (
+                    notifications.map((n) => (
+                        <NotificationSnackbar
+                            key={n.id}
+                            id={n.id}
+                            title={n.title}
+                            message={n.message}
+                            time={n.time}
+                            type={getNotificationType(n)}
+                        />
+                    ))
+                )}
             </TabsContent>
 
             <TabsContent value="unread" className="mt-4 space-y-4">
-                <NotificationSnackbar
-                    title="Pending Evaluation"
-                    message="You still have 3 evaluation forms that require completion."
-                    time="Today, 9:15 AM"
-                    type="warning"
-                />
-                <NotificationSnackbar
-                    title="New Document Submitted"
-                    message="A new IPCR document was submitted for your review."
-                    time="Today, 8:58 AM"
-                    type="info"
-                />
+                {unreadNotifications.length === 0 ? (
+                    <p className="py-8 text-center text-muted-foreground">All caught up!</p>
+                ) : (
+                    unreadNotifications.map((n) => (
+                        <NotificationSnackbar
+                            key={n.id}
+                            id={n.id}
+                            title={n.title}
+                            message={n.message}
+                            time={n.time}
+                            type={getNotificationType(n)}
+                        />
+                    ))
+                )}
             </TabsContent>
 
             <TabsContent value="important" className="mt-4 space-y-4">
-                <NotificationSnackbar
-                    title="Policy Deadline Alert"
-                    message="Submission deadline for quarterly compliance reports is tomorrow."
-                    time="Yesterday, 4:20 PM"
-                    type="warning"
-                />
+                {importantNotifications.length === 0 ? (
+                    <p className="py-8 text-center text-muted-foreground">No important notifications.</p>
+                ) : (
+                    importantNotifications.map((n) => (
+                        <NotificationSnackbar
+                            key={n.id}
+                            id={n.id}
+                            title={n.title}
+                            message={n.message}
+                            time={n.time}
+                            type={getNotificationType(n)}
+                        />
+                    ))
+                )}
             </TabsContent>
         </Tabs>
     );

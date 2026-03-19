@@ -1,7 +1,12 @@
+import { router } from '@inertiajs/react';
 import { Bell, CheckCheck, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function NotificationsHeader() {
+    const handleMarkAllAsRead = () => {
+        router.post('/notifications/mark-all-read');
+    };
+
     return (
         <div className="notif-header-shell flex flex-col gap-4 rounded-xl border border-border bg-card/80 p-4 shadow-sm md:flex-row md:items-center md:justify-between">
             <div>
@@ -18,7 +23,7 @@ export default function NotificationsHeader() {
                     <Filter className="size-4" />
                     Filter
                 </Button>
-                <Button className="inline-flex items-center gap-2">
+                <Button className="inline-flex items-center gap-2" onClick={handleMarkAllAsRead}>
                     <CheckCheck className="size-4" />
                     Mark all as read
                 </Button>

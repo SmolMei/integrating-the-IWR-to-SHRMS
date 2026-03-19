@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { router } from '@inertiajs/react';
 import { BellRing, Clock3, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 type NotificationSnackbarProps = {
+    id?: number;
     title: string;
     message: string;
     time: string;
@@ -10,6 +12,7 @@ type NotificationSnackbarProps = {
 };
 
 export default function NotificationSnackbar({
+    id,
     title,
     message,
     time,
@@ -33,6 +36,13 @@ export default function NotificationSnackbar({
         success: 'bg-secondary/20 text-secondary-foreground',
     };
 
+    const handleDismiss = () => {
+        setVisible(false);
+        if (id) {
+            router.post(`/notifications/${id}/read`, {}, { preserveScroll: true });
+        }
+    };
+
     return (
         <div className={`animate-fade-in-up w-full rounded-xl border p-4 text-foreground shadow-lg ${typeStyles[type]}`}>
             <div className="flex items-start gap-3">
@@ -54,7 +64,7 @@ export default function NotificationSnackbar({
                     variant="ghost"
                     size="icon"
                     className="size-7 text-muted-foreground hover:bg-card/70 hover:text-foreground"
-                    onClick={() => setVisible(false)}
+                    onClick={handleDismiss}
                     aria-label="Dismiss notification"
                 >
                     <X className="size-4" />
