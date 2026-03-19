@@ -1,0 +1,12 @@
+{
+  "name": "iwr-middleware",
+  "version": "1.0.0",
+  "description": "Node.js Express middleware for IWR Python integration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
