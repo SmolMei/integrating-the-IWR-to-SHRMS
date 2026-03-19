@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AttendanceRecord;
 use App\Models\HistoricalDataRecord;
+use App\Models\IpcrSubmission;
+use App\Models\LeaveApplication;
 use App\Models\LeaveRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -58,7 +60,7 @@ class PaginationController extends Controller
         $perPage = max(1, min(50, (int) $request->integer('perPage', 10)));
 
         $leaveRequests = LeaveRequest::query()
-            ->with('user:id,name')
+            ->with('user:id,name,employee_id')
             ->when($search !== '', function ($query) use ($search): void {
                 $query->where(function ($subQuery) use ($search): void {
                     $subQuery
@@ -72,14 +74,24 @@ class PaginationController extends Controller
             ->latest()
             ->paginate($perPage)
             ->withQueryString()
-            ->through(fn (LeaveRequest $leaveRequest): array => [
-                'id' => $leaveRequest->id,
-                'name' => $leaveRequest->user?->name ?? 'Unknown User',
-                'leaveType' => $leaveRequest->leave_type,
-                'startDate' => $leaveRequest->start_date?->format('Y-m-d') ?? '-',
-                'endDate' => $leaveRequest->end_date?->format('Y-m-d') ?? '-',
-                'reason' => $leaveRequest->reason,
-            ]);
+            ->through(function (LeaveRequest $leaveRequest): array {
+                // Find matching LeaveApplication by leave_request_id
+                $leaveApp = LeaveApplication::query()
+                    ->where('leave_request_id', $leaveRequest->id)
+                    ->first();
+
+                return [
+                    'id' => $leaveRequest->id,
+                    'name' => $leaveRequest->user?->name ?? 'Unknown User',
+                    'leaveType' => $leaveRequest->leave_type,
+                    'startDate' => $leaveRequest->start_date?->format('Y-m-d') ?? '-',
+                    'endDate' => $leaveRequest->end_date?->format('Y-m-d') ?? '-',
+                    'reason' => $leaveRequest->reason,
+                    'status' => $leaveApp?->status,
+                    'stage' => $leaveApp?->stage,
+                    'leaveApplicationId' => $leaveApp?->id,
+                ];
+            });
 
         return Inertia::render('admin/leave-management', [
             'search' => $search,
@@ -139,6 +151,10 @@ class PaginationController extends Controller
 
         $employees = User::query()
             ->where('role', User::ROLE_EMPLOYEE)
+            ->whereNotNull('employee_id')
+            ->whereHas('employee', function ($query): void {
+                $query->whereHas('ipcrSubmissions');
+            })
             ->when($search !== '', function ($query) use ($search): void {
                 $query->where(function ($subQuery) use ($search): void {
                     $subQuery
@@ -149,13 +165,23 @@ class PaginationController extends Controller
             ->orderBy('name')
             ->paginate($perPage)
             ->withQueryString()
-            ->through(fn (User $user): array => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'role' => $user->role,
-                'position' => 'Employee',
-            ]);
+            ->through(function (User $user): array {
+                $latestSubmission = IpcrSubmission::query()
+                    ->where('employee_id', $user->employee_id)
+                    ->latest()
+                    ->first();
+
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role,
+                    'position' => 'Employee',
+                    'employee_id' => $user->employee_id,
+                    'has_evaluation' => $latestSubmission && $latestSubmission->performance_rating !== null,
+                    'evaluation_status' => $latestSubmission?->status,
+                ];
+            });
 
         return Inertia::render('document-management', [
             'search' => $search,

@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'iwr' => [
+        'url' => env('IWR_MIDDLEWARE_URL', 'http://localhost:3000'),
+    ],
+
 ];
